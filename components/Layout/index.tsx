@@ -2,22 +2,32 @@ import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Menu } from "@headlessui/react";
 import Dropdown from "../Dropdown";
+import { toast } from "react-toastify";
+import { getError } from "../../utils";
+import { removeAll } from "../../redux/slices/cart";
 
 interface LayoutProps {
   children?: React.ReactNode;
   title?: string;
 }
 export default function Layout({ children, title }: LayoutProps) {
+  const dispatch = useAppDispatch();
   const { status, data: session } = useSession();
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const { items } = useAppSelector((state) => state.cart);
   useEffect(() => {
     setCartItemsCount(items.length);
   }, [items]);
-
+  const logoutHandler = async () => {
+    await signOut({ callbackUrl: "/auth/login" })
+      .then((res) => {
+        dispatch(removeAll());
+      })
+      .catch((err) => toast.error(getError(err)));
+  };
   return (
     <>
       <Head>
@@ -49,11 +59,21 @@ export default function Layout({ children, title }: LayoutProps) {
                   <Menu.Button className="text-blue-400">
                     {session?.user.name}
                   </Menu.Button>
-                  <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg">
+                  <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-white">
                     <Menu.Item>
                       <Dropdown className="dropdown-link" href="/profile">
                         Profile
                       </Dropdown>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Dropdown className="dropdown-link" href="/orders">
+                        Orders
+                      </Dropdown>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <a href="#" onClick={logoutHandler}>
+                        Logout
+                      </a>
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>

@@ -4,12 +4,13 @@ import {
   combineReducers,
   configureStore,
 } from "@reduxjs/toolkit";
-import { CartReducer, ProductsReducer } from "./slices";
+import { CartReducer, ProductsReducer, OrderReducer } from "./slices";
 
 export const store = configureStore({
   reducer: {
     products: ProductsReducer,
     cart: CartReducer,
+    order: OrderReducer,
   },
 });
 

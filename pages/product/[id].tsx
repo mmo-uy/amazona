@@ -1,27 +1,26 @@
-import { useRouter } from "next/router";
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import Image from "next/image";
 import { AddToCartButton, Layout } from "../../components";
-import { useAppSelector } from "../../redux/hooks";
+import { GetServerSideProps } from "next";
+import { Product } from "../../types/index";
+import { db } from "../../utils/db";
+import { ProductModel } from "../../models";
 
-const SingleProductPage = () => {
-  const { query } = useRouter();
-  const { id } = query;
-  const { productsList, loading } = useAppSelector((state) => state.products);
-  const product = productsList.find((p) => p.id.toString() === id);
+const SingleProductPage = (props: { product: Product }) => {
+  const { product } = props;
 
   if (!product) {
     return <p>Not found</p>;
   }
   return (
-    <Layout title={product.title}>
-      <div className="grid md:grid-cols-4 md:gap-3">
+    <Layout title={product?.title}>
+      <div className="grid md:grid-cols-4 md:gap-3" key={product?._id}>
         <div className="md:col-span-2">
           <Image
-            src={product.image}
+            src={product?.image}
             height={640}
             width={480}
-            alt={product.id.toString()}
+            alt={product?._id?.toString()}
           />
         </div>
         <div>
@@ -36,7 +35,7 @@ const SingleProductPage = () => {
               <p>{product.category}</p>
             </li>
             <li>
-              {product.rating.rate} of {product.rating.count} reviews
+              {product.rating} of {product.reviews} reviews
             </li>
           </ul>
         </div>
@@ -55,5 +54,16 @@ const SingleProductPage = () => {
     </Layout>
   );
 };
-
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  const { id } = params;
+  await db.connect();
+  const product = await ProductModel.findById<Product>(id).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: db.convertDocToObj(product!),
+    },
+  };
+};
 export default SingleProductPage;

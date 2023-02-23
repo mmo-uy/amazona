@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Product, LoadingState } from "../../../types";
 import { getAllProducts } from "../../../services/product";
+import { getSingleProduct } from "../../../services/product/index";
 
 interface ProductState {
   productsList: Product[];
@@ -19,11 +20,22 @@ export const asyncListProducts = createAsyncThunk<Product[]>(
       const response = await getAllProducts();
       return response;
     } catch (error) {
-      // errorHandlerHelper(error, dispatch);
       return rejectWithValue(error);
     }
   }
 );
+export const asyncGetProduct = createAsyncThunk<Product, string | number>(
+  "product/single",
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await getSingleProduct(id);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -39,7 +51,19 @@ const productSlice = createSlice({
     builder.addCase(asyncListProducts.fulfilled, (state, action) => {
       state.loading = "succeeded";
       state.productsList = action.payload;
-      // logger.info("asyncListClients.successs", action.payload);
+      // logger.info("asyncListClients.success", action.payload);
+    });
+    builder.addCase(asyncGetProduct.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(asyncGetProduct.rejected, (state, action) => {
+      state.loading = "failed";
+      // logger.error("asyncListClients.error", action.error);
+    });
+    builder.addCase(asyncGetProduct.fulfilled, (state, action) => {
+      state.loading = "succeeded";
+      state.selectedProduct = action.payload;
+      // logger.info("asyncListClients.success", action.payload);
     });
   },
 });

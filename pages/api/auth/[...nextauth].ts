@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "../../../utils/db";
 import { UserModel } from "../../../models";
 import { verifyHashedPassword } from "../../../utils/index";
-import { Role } from "../../../types";
+import { Role, User } from "../../../types";
 
 export default NextAuth({
   session: {
@@ -39,7 +39,7 @@ export default NextAuth({
       },
       async authorize(credentials, req) {
         await db.connect();
-        const user = await UserModel.findOne({
+        const user = await UserModel.findOne<User>({
           email: credentials?.email,
         });
         await db.disconnect();
@@ -52,11 +52,15 @@ export default NextAuth({
             name: user.name,
             email: user.email,
             image: "f",
-            isAdmin: user.Role,
+            isAdmin: user.role,
           };
         }
         throw new Error("Invalid email or password");
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/login",
+  },
 });

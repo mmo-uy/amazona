@@ -11,7 +11,9 @@
 .primary-button:disabled {
   @apply bg-gray-300 hover:bg-gray-400 active:bg-gray-500;
 }
-
+.default-button {
+  @apply rounded bg-gray-100 py-2 px-4 text-black shadow outline-none hover:bg-gray-200 active:bg-gray-300;
+}
 .tooltip {
   position: relative;
   display: inline-block;

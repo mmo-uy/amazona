@@ -13,13 +13,13 @@ export default function Home() {
   }, []);
 
   if (loading === "pending") {
-    return <p>CARGANDO...</p>
+    return <p>CARGANDO...</p>;
   }
   return (
     <Layout title="Home Page">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {productsList.map((item) => (
-          <ProductItem product={item} key={item.id} />
+        {productsList.map((product) => (
+          <ProductItem product={product} key={product?._id} />
         ))}
       </div>
     </Layout>

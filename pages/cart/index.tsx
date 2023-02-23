@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Layout from "../../components/Layout/index";
-import { Product, ProductInCart } from "../../types";
+import { ProductInCart } from "../../types";
 import Link from "next/link";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { removeItem, addItem } from "../../redux/slices/cart";
@@ -40,15 +40,15 @@ const CartPage = () => {
               </thead>
               <tbody>
                 {cartItems.map((item) => (
-                  <tr key={item.id} className="border-b">
+                  <tr key={item._id} className="border-b">
                     <td>
                       <Link
                         className="flex items-center"
-                        href={`/product/${item.id}`}
+                        href={`/product/${item._id}`}
                       >
                         <Image
                           src={item.image}
-                          alt={item.id.toString()}
+                          alt={item?._id.toString()}
                           width={50}
                           height={50}
                         ></Image>
@@ -74,7 +74,8 @@ const CartPage = () => {
                     <td className="p-5 text-right">
                       ${item.price}{" "}
                       <div className="tooltip">
-                        PU<span className="tooltiptext">Price per unit</span>
+                        PU
+                        <span className="tooltiptext">Price per unit</span>
                       </div>
                     </td>
                     <td className="p-5 text-center">
@@ -92,12 +93,14 @@ const CartPage = () => {
               <li>
                 <div className="pb-3 text-xl">
                   Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) : $
-                  {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                  {cartItems
+                    .reduce((a, c) => a + c.quantity * c.price, 0)
+                    .toFixed(2)}
                 </div>
               </li>
               <li>
                 <button
-                  onClick={() => router.push("login?redirect=/shipping")}
+                  onClick={() => router.push("auth/login?redirect=/shipping")}
                   className="primary-button w-full"
                 >
                   Check Out

@@ -1,4 +1,5 @@
-import mongoose, { ConnectionStates } from "mongoose";
+import mongoose, { ConnectionStates, Mongoose } from "mongoose";
+import Product from "../types/index";
 
 const connection = {
   isConnected: 0,
@@ -7,13 +8,13 @@ const { MONGODB } = process.env;
 
 async function connect() {
   if (connection.isConnected) {
-    console.log("already connected");
+    console.info("already connected");
     return;
   }
   if (mongoose.connections.length > 0) {
     connection.isConnected = mongoose.connections[0].readyState;
     if (connection.isConnected === 1) {
-      console.log("use previous connection");
+      console.info("use previous connection");
       return;
     }
     await mongoose.disconnect();
@@ -34,4 +35,11 @@ async function disconnect() {
   }
 }
 
-export const db = { connect, disconnect };
+function convertDocToObj(doc: mongoose.DocumentDefinition<Product>) {
+  doc._id = doc._id.toString();
+  doc.createdAt = doc.createdAt.toString();
+  doc.updatedAt = doc.updatedAt.toString();
+  return doc;
+}
+
+export const db = { connect, disconnect, convertDocToObj };

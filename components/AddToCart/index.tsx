@@ -14,7 +14,7 @@ const AddToCartButton = ({ product }: AddToCartButtonProps) => {
   };
   return (
     <button
-      key={product.id}
+      key={product._id}
       className="primary-button w-full"
       type="button"
       onClick={addToCart}

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Role, User } from "../types";
+import { Role, User as UserModel } from "../types";
 
-const userSchema = new mongoose.Schema<User>(
+const userSchema = new mongoose.Schema<UserModel>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -13,5 +13,5 @@ const userSchema = new mongoose.Schema<User>(
   }
 );
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
-export default User;
+const UserModel = mongoose.models.User || mongoose.model("User", userSchema);
+export default UserModel;

@@ -23,8 +23,8 @@ const LoginPage = () => {
   useEffect(() => {
     if (session?.user) {
       let url = "/";
-      if (redirect?.length) {
-        // url = redirect.toString();
+      if (redirect) {
+        url = redirect.toString();
       }
       router.push(url);
     }
