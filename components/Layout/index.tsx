@@ -5,9 +5,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { signOut, useSession } from "next-auth/react";
 import { Menu } from "@headlessui/react";
 import Dropdown from "../Dropdown";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { getError } from "../../utils";
 import { removeAll } from "../../redux/slices/cart";
+import "react-toastify/dist/ReactToastify.css";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -90,6 +91,7 @@ export default function Layout({ children, title }: LayoutProps) {
           <p>Copyright ©️ 2023 - Amazona</p>
         </footer>
       </div>
+      <ToastContainer />
     </>
   );
 }

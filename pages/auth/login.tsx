@@ -79,7 +79,6 @@ const LoginPage = () => {
             })}
             className="w-full"
             id="password"
-            autoFocus
           ></input>
           {errors.password && (
             <div className="text-red-500 ">{errors.password.message}</div>
@@ -90,7 +89,9 @@ const LoginPage = () => {
         </div>
         <div className="mb-4 ">
           Don&apos;t have an account? &nbsp;
-          <Link href="register">Register</Link>
+          <Link className={"text-green-600"} href={`/auth/register`}>
+            Register
+          </Link>
         </div>
       </form>
     </Layout>
