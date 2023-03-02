@@ -7,6 +7,9 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { asyncGetOrder } from "../../redux/slices/order";
 
+interface OrderScreenQueryParams {
+  id?: string;
+}
 const OrderScreen = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -16,7 +19,8 @@ const OrderScreen = () => {
   useEffect(() => {
     return () => {
       if (router.isReady) {
-        dispatch(asyncGetOrder(router.query.id));
+        const { id } = router.query as OrderScreenQueryParams;
+        dispatch(asyncGetOrder(id!));
       }
     };
   }, [router.isReady]);

@@ -1,5 +1,4 @@
-import mongoose, { ConnectionStates, Mongoose } from "mongoose";
-import Product from "../types/index";
+import mongoose from "mongoose";
 
 const connection = {
   isConnected: 0,
@@ -35,11 +34,4 @@ async function disconnect() {
   }
 }
 
-function convertDocToObj(doc: mongoose.DocumentDefinition<Product>) {
-  doc._id = doc._id.toString();
-  doc.createdAt = doc.createdAt.toString();
-  doc.updatedAt = doc.updatedAt.toString();
-  return doc;
-}
-
-export const db = { connect, disconnect, convertDocToObj };
+export const db = { connect, disconnect };

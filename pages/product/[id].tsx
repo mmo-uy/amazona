@@ -54,15 +54,18 @@ const SingleProductPage = (props: { product: Product }) => {
     </Layout>
   );
 };
+interface SingleProductPageQueryParams {
+  id?: string;
+}
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { params } = context;
-  const { id } = params;
+  const { id } = params as SingleProductPageQueryParams;
   await db.connect();
   const product = await ProductModel.findById<Product>(id).lean();
   await db.disconnect();
   return {
     props: {
-      product: db.convertDocToObj(product!),
+      product: product!,
     },
   };
 };

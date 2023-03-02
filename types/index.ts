@@ -13,6 +13,8 @@ export interface Product {
   image: string;
   rating: number;
   reviews: number;
+  createdAt: string;
+  updatedAt: string;
 }
 export interface ProductInCart extends Product {
   quantity: number;
