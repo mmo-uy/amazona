@@ -1,4 +1,4 @@
-import { PaymentMethod } from "../types";
+import { PaymentMethod, PaymentMethods } from "../types";
 import { hashPassword } from "./index";
 
 export const mockedProducts = [
@@ -142,7 +142,7 @@ export const mockedUsers = [
 ];
 
 export const availablePaymentMethods: PaymentMethod[] = [
-  { name: "PayPal", value: "paypal" },
-  { name: "Stripe", value: "stripe" },
-  { name: "CashOnDelivery", value: "cash" },
+  { name: PaymentMethods.PayPal, value: "paypal" },
+  { name: PaymentMethods.Stripe, value: "stripe" },
+  { name: PaymentMethods.Cash, value: "cash" },
 ];

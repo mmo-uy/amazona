@@ -16,7 +16,7 @@ const PlaceOrderPage = () => {
   const { shippingAddress, items, paymentMethod } = useAppSelector(
     (state) => state.cart
   );
-  const { order } = useAppSelector((state) => state.order);
+  const { selectedOrder } = useAppSelector((state) => state.order);
   // TODO change
   const [loading, setLoading] = useState(false);
   //TODO move to utils
@@ -46,11 +46,11 @@ const PlaceOrderPage = () => {
     setLoading(false);
   };
   useEffect(() => {
-    if (order) {
+    if (selectedOrder) {
       dispatch(removeAll());
-      router.push(`/order/${order._id}`);
+      router.push(`/order/${selectedOrder._id}`);
     }
-  }, [order]);
+  }, [selectedOrder]);
 
   return (
     <Layout title="Place Order">
@@ -153,8 +153,7 @@ const PlaceOrderPage = () => {
                   onClick={placeOrderHandler}
                   className="primary-button w-full"
                 >
-                  {/* {loading ? "Loading..." : "Place Order"} */}
-                  {"Place Order"}
+                  {loading ? "Loading..." : "Place Order"}
                 </button>
               </li>
             </ul>

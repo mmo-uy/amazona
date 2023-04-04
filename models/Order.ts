@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema(
     taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     isPaid: { type: Boolean, required: true, default: false },
+    paymentResult: { id: String, status: String, email: String },
     isDelivered: { type: Boolean, required: true, default: false },
     paidAt: { type: Date },
     deliveredAt: { type: Date },
@@ -37,5 +38,6 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
-export default Order;
+const OrderModel =
+  mongoose.models.Order || mongoose.model("Order", orderSchema);
+export default OrderModel;

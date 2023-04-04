@@ -28,14 +28,9 @@ export interface ShippingAddress {
   postalCode: string;
   country: string;
 }
-export interface PaymentMethod {
-  name: string;
-  value?: string;
-  image?: string;
-  icon?: string;
-}
+
 export interface Order {
-  _id?: number | string;
+  _id?: string;
   userId: string;
   orderItems: Pick<
     ProductInCart,
@@ -44,7 +39,6 @@ export interface Order {
       "_id" & "stock" & "description" & "category" & "rating" & "reviews"
     >
   >[];
-  // ProductInCart[];
   shippingAddress: ShippingAddress;
   paymentMethod?: string;
   itemsPrice: string | number;
@@ -52,11 +46,29 @@ export interface Order {
   taxPrice: string | number;
   totalPrice: string | number;
   isPaid?: boolean;
+  paymentResult?: { id: string; status: string; email: string };
   isDelivered?: boolean;
   paidAt?: string;
   deliveredAt?: string;
+  createdAt?: string;
 }
-
+export interface PaymentMethod {
+  name: PaymentMethods.Cash | PaymentMethods.PayPal | PaymentMethods.Stripe;
+  value?: string;
+  image?: string;
+  icon?: string;
+}
+export interface Payment {
+  method: PaymentMethods.Cash | PaymentMethods.PayPal | PaymentMethods.Stripe;
+  isPaid: boolean;
+  amount: string;
+  isPending: string;
+}
+export enum PaymentMethods {
+  PayPal = "Paypal",
+  Stripe = "Stripe",
+  Cash = "Cash",
+}
 export interface User {
   id: string;
   name: string;

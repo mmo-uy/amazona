@@ -10,7 +10,7 @@ export default async function handler(
 ) {
   const session = await getSession({ req });
   await db.connect();
-  const order = await OrderModel.findById(req.query.id);
+  const orders = await OrderModel.find({ userId: session?.user?.id });
   await db.disconnect();
-  res.send(order);
+  res.send(orders);
 }

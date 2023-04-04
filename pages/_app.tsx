@@ -5,10 +5,13 @@ import { store } from "../redux/store";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
-interface AuthProps {
-  children?: React.ReactNode;
-}
+const payPalScriptProviderInitialOptions = {
+  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+  currency: "USD",
+  intent: "capture",
+};
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
@@ -22,7 +25,12 @@ export default function App({
       <Provider store={store}>
         {Component.auth ? (
           <ProtectedLayout>
-            <Component {...pageProps} />
+            <PayPalScriptProvider
+              options={payPalScriptProviderInitialOptions}
+              deferLoading={true}
+            >
+              <Component {...pageProps} />
+            </PayPalScriptProvider>
           </ProtectedLayout>
         ) : (
           <Component {...pageProps} />

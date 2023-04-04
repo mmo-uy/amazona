@@ -1,19 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { LoadingState, Order } from "../../../types";
-import { addOrder, getSingleOrder } from "../../../services/order/index";
+import {
+  addOrder,
+  getSingleOrder,
+  getOrders,
+} from "../../../services/order/index";
 
 interface OrderState {
   order: Order | null;
-  loading: LoadingState;
   selectedOrder: Order | null;
+  loading: LoadingState;
+  orders: Order[];
   error: {
     message: String;
   } | null;
 }
 const initialState: OrderState = {
   order: null,
-  loading: "idle",
   selectedOrder: null,
+  loading: "idle",
+  orders: [],
   error: null,
 };
 
@@ -30,7 +36,7 @@ export const asyncAddOrder = createAsyncThunk<Order, Order>(
     }
   }
 );
-export const asyncGetOrder = createAsyncThunk<Order, string | number>(
+export const asyncGetOrder = createAsyncThunk<Order, string>(
   "order/single",
   async (id, { rejectWithValue, dispatch }) => {
     try {
@@ -42,6 +48,17 @@ export const asyncGetOrder = createAsyncThunk<Order, string | number>(
   }
 );
 
+export const asyncGetOrders = createAsyncThunk<Order[]>(
+  "order/all",
+  async (_params, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await getOrders();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -56,7 +73,7 @@ const orderSlice = createSlice({
     });
     builder.addCase(asyncAddOrder.fulfilled, (state, action) => {
       state.loading = "succeeded";
-      state.order = action.payload;
+      state.selectedOrder = action.payload;
       // logger.info("asyncListClients.success", action.payload);
     });
     builder.addCase(asyncGetOrder.pending, (state) => {
@@ -69,7 +86,20 @@ const orderSlice = createSlice({
     });
     builder.addCase(asyncGetOrder.fulfilled, (state, action) => {
       state.loading = "succeeded";
-      state.selectedOrder = action.payload;
+      state.order = action.payload;
+      // logger.info("asyncListClients.success", action.payload);
+    });
+    builder.addCase(asyncGetOrders.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(asyncGetOrders.rejected, (state, action) => {
+      state.loading = "failed";
+      state.error = { message: "ERROR" };
+      // logger.error("asyncListClients.error", action.error);
+    });
+    builder.addCase(asyncGetOrders.fulfilled, (state, action) => {
+      state.loading = "succeeded";
+      state.orders = action.payload;
       // logger.info("asyncListClients.success", action.payload);
     });
   },

@@ -11,6 +11,18 @@ const nextConfig = {
       },
     ],
   },
+  redirects: [
+    {
+      "source": "/apps/amazona",
+      "has": [
+        {
+          "type": "host",
+          "value": "localhost:3000"
+        }
+      ],
+      "destination": "/apps/amazona"
+    }
+  ]
 };
 
 module.exports = nextConfig;

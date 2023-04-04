@@ -9,15 +9,15 @@ type ProductItemProps = {
 };
 export default function ProductItem({ product }: ProductItemProps) {
   return (
-    <div className="card" key={product._id}>
+    <div className="card justify-between" key={product._id}>
       <Link href={`/product/${product._id}`}>
         <Image
-          className="rounded shadow"
+          className="rounded"
           src={product?.image}
           alt={product?.title}
           width={200}
           height={200}
-          style={{ objectFit: "cover" }}
+          // style={{ objectFit: "cover" }}
         />
       </Link>
       <div className="flex flex-col items-center justify-center p-5 align-bottom">

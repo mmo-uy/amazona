@@ -6,3 +6,5 @@ export const addOrder = async (order: Order): AxiosPromise<Order> =>
 export const getSingleOrder = async (
   id: string | number
 ): AxiosPromise<Order> => await axios.get(`/api/orders/${id}`);
+export const getOrders = async (): AxiosPromise<Order[]> =>
+  await axios.get(`/api/orders/all`);
